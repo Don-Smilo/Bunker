@@ -3,6 +3,8 @@
 
 #include "MainCharacter.h"
 #include "EnhancedInputComponent.h"
+#include "Camera/CameraComponent.h"
+#include "InputActionValue.h"
 #include "EnhancedInputSubsystems.h"
 
 // Sets default values
@@ -10,6 +12,11 @@ AMainCharacter::AMainCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	FirstPersonCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("First Person Camera"));
+	FirstPersonCameraComponent->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, 50.0f), FRotator(0.0f, 0.f, 0.f));
+	FirstPersonCameraComponent->bUsePawnControlRotation = true;
+
 
 }
 
@@ -47,15 +54,13 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 void AMainCharacter::Move(const FInputActionValue& Value)
 {
 	FVector2D MovementVector = Value.Get<FVector2D>();
-
+	 
 	if (GetController())
 	{
 		AddMovementInput(GetActorForwardVector(), MovementVector.Y);
 		AddMovementInput(GetActorRightVector(), MovementVector.X);
-	}
-	else
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Controller not found"));
+
+		
 	}
 }
 
