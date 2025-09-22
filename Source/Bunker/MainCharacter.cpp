@@ -13,7 +13,7 @@ AMainCharacter::AMainCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-
+	bFlashlightIsOn = false;
 }
 
 // Called when the game starts or when spawned
@@ -44,6 +44,7 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	{
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AMainCharacter::Move);
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AMainCharacter::Look);
+		EnhancedInputComponent->BindAction(FlashlightAction, ETriggerEvent::Triggered, this, &AMainCharacter::SwitchFlashlight);
 	}
 }
 
@@ -69,5 +70,10 @@ void AMainCharacter::Look(const FInputActionValue& Value)
 		AddControllerPitchInput(LookAxisVector.Y);
 		AddControllerYawInput(LookAxisVector.X);
 	}
+}
+
+void AMainCharacter::SwitchFlashlight()
+{
+	SwitchFlashlightEvent();
 }
 
