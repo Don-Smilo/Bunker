@@ -5,11 +5,9 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include <EnhancedInputLibrary.h>
-//#include <Camera/CameraComponent.h>
 #include "MainCharacter.generated.h"
 
 class UInputComponent;
-class UCameraComponent;
 
 UCLASS()
 class BUNKER_API AMainCharacter : public ACharacter
@@ -25,8 +23,6 @@ class BUNKER_API AMainCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* LookAction;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess =  "true"))
-	UCameraComponent* FirstPersonCameraComponent;
 
 public:
 	// Sets default values for this character's properties
