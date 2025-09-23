@@ -47,13 +47,12 @@ protected:
 
 	void Look(const FInputActionValue& Value);
 
-	void SwitchFlashlight();
 
 	
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
-	void SwitchFlashlightEvent();
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Flashlight")
+	void SwitchFlashlight();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Flashlight")
 	bool bFlashlightIsOn;
 
 };

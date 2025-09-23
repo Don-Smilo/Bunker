@@ -72,8 +72,4 @@ void AMainCharacter::Look(const FInputActionValue& Value)
 	}
 }
 
-void AMainCharacter::SwitchFlashlight()
-{
-	SwitchFlashlightEvent();
-}
 
