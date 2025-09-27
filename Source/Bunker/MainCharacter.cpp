@@ -6,6 +6,7 @@
 #include "Camera/CameraComponent.h"
 #include "InputActionValue.h"
 #include "EnhancedInputSubsystems.h"
+#include "InteractableInterface.h"
 
 // Sets default values
 AMainCharacter::AMainCharacter()
@@ -14,6 +15,10 @@ AMainCharacter::AMainCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	bFlashlightIsOn = false;
+	bIsInInteraction = false;
+	bCanInteract = false;
+
+	ActorToInteract = nullptr;
 }
 
 // Called when the game starts or when spawned
@@ -35,6 +40,8 @@ void AMainCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	CheckInteract();
+
 }
 
 // Called to bind functionality to input
@@ -45,6 +52,7 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AMainCharacter::Move);
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AMainCharacter::Look);
 		EnhancedInputComponent->BindAction(FlashlightAction, ETriggerEvent::Triggered, this, &AMainCharacter::SwitchFlashlight);
+		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &AMainCharacter::Interact);
 	}
 }
 
@@ -70,6 +78,87 @@ void AMainCharacter::Look(const FInputActionValue& Value)
 		AddControllerPitchInput(LookAxisVector.Y);
 		AddControllerYawInput(LookAxisVector.X);
 	}
+}
+
+void AMainCharacter::Interact()
+{
+	if (ActorToInteract != nullptr)
+	{
+		if (IInteractableInterface::Execute_GetInteractionType(ActorToInteract) == EInteractionType::Toggle)
+		{
+			IInteractableInterface::Execute_StartInteract(ActorToInteract, this);
+
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Toggled"));
+		}
+
+		else
+		{
+			if (!bIsInInteraction)
+			{
+				IInteractableInterface::Execute_StartInteract(ActorToInteract, this);
+				bCanInteract = false;
+				bIsInInteraction = true;
+
+				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Interaction started"));
+			}
+
+			else
+			{
+				IInteractableInterface::Execute_StopInteract(ActorToInteract, this);
+				bIsInInteraction = false;
+			}
+		}
+
+	}
+}
+
+void AMainCharacter::CheckInteract()
+{
+	if (!bIsInInteraction) {
+
+		FVector ViewLocation;
+		FRotator ViewRotation;
+
+		GetController()->GetPlayerViewPoint(ViewLocation, ViewRotation);
+
+		FVector TraceStart = ViewLocation;
+		FVector TraceEnd = TraceStart + (ViewRotation.Vector() * 100.f);
+
+		FHitResult HitResult;
+		FCollisionQueryParams Params;
+		Params.AddIgnoredActor(this);
+
+		bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECC_Visibility, Params);
+
+		if (bHit && HitResult.GetActor())
+		{
+			AActor* HitActor = HitResult.GetActor();
+
+			if (HitActor->Implements<UInteractableInterface>())
+			{
+				ActorToInteract = HitActor;
+				bCanInteract = IInteractableInterface::Execute_GetCanInteract(ActorToInteract);
+			}
+
+			else
+			{
+				ActorToInteract = nullptr;
+				bCanInteract = false;
+			}
+		}
+
+		else
+		{
+			ActorToInteract = nullptr;
+			bCanInteract = false;
+		}
+	}
+
+	else
+	{
+		bCanInteract = false;
+	}
+
 }
 
 

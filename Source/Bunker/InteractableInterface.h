@@ -6,6 +6,14 @@
 #include "UObject/Interface.h"
 #include "InteractableInterface.generated.h"
 
+UENUM(BlueprintType)
+enum class EInteractionType :uint8
+{
+	Focus,
+	Inspect,
+	Toggle
+};
+
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
 class UInteractableInterface : public UInterface
@@ -24,11 +32,21 @@ class BUNKER_API IInteractableInterface
 public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
-	void Interact(AActor* Interactor);
+	void StartInteract(AActor* Interactor);
+	
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
+	void StopInteract(AActor* Interactor);
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
-	bool CanInteract(AActor* Interactor);
+	bool GetCanInteract() const;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
-	FText GetInteractionText();
+	bool GetIsInInteraction() const;
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
+	EInteractionType GetInteractionType() const;
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
+	FText GetInteractionText() const;
+
 };

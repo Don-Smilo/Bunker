@@ -26,6 +26,8 @@ class BUNKER_API AMainCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* FlashlightAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* InteractAction;
 
 public:
 	// Sets default values for this character's properties
@@ -47,12 +49,27 @@ protected:
 
 	void Look(const FInputActionValue& Value);
 
-
 	
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Flashlight")
 	void SwitchFlashlight();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Flashlight")
 	bool bFlashlightIsOn;
+
+
+	void Interact();
+
+	void CheckInteract();
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Interaction")
+	bool bIsInInteraction;
+	
+	AActor* ActorToInteract;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Interaction")
+	bool bCanInteract;
+
+	//UPROPERTY(BlueprintReadOnly, Category = "Interaction")
+	//EInteractionType InteractionType;
 
 };
