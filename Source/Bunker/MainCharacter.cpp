@@ -51,8 +51,12 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	{
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AMainCharacter::Move);
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AMainCharacter::Look);
+
 		EnhancedInputComponent->BindAction(FlashlightAction, ETriggerEvent::Triggered, this, &AMainCharacter::SwitchFlashlight);
+		
 		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &AMainCharacter::Interact);
+		EnhancedInputComponent->BindAction(InspectRotationAction, ETriggerEvent::Triggered, this, &AMainCharacter::RotateInspectableItem);
+		EnhancedInputComponent->BindAction(InspectScaleAction, ETriggerEvent::Triggered, this, &AMainCharacter::ScaleInspectableItem);
 	}
 }
 
@@ -64,8 +68,6 @@ void AMainCharacter::Move(const FInputActionValue& Value)
 	{
 		AddMovementInput(GetActorForwardVector(), MovementVector.Y);
 		AddMovementInput(GetActorRightVector(), MovementVector.X);
-
-		
 	}
 }
 
@@ -88,7 +90,7 @@ void AMainCharacter::Interact()
 		{
 			IInteractableInterface::Execute_StartInteract(ActorToInteract, this);
 
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Toggled"));
+			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Toggled"));
 		}
 
 		else
@@ -99,13 +101,15 @@ void AMainCharacter::Interact()
 				bCanInteract = false;
 				bIsInInteraction = true;
 
-				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Interaction started"));
+				//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Interaction started"));
 			}
 
 			else
 			{
 				IInteractableInterface::Execute_StopInteract(ActorToInteract, this);
 				bIsInInteraction = false;
+				
+				//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Interaction stopped"));
 			}
 		}
 

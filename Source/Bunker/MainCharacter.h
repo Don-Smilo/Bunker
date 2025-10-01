@@ -14,7 +14,7 @@ class BUNKER_API AMainCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputMappingContext* CurrentMappingContext;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
@@ -28,6 +28,12 @@ class BUNKER_API AMainCharacter : public ACharacter
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* InteractAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta =(AllowPrivateAccess="true"))
+	class UInputAction* InspectRotationAction;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta =(AllowPrivateAccess="true"))
+	class UInputAction* InspectScaleAction;
 
 public:
 	// Sets default values for this character's properties
@@ -61,6 +67,10 @@ protected:
 
 	void CheckInteract();
 
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interaction")
+	bool bIsInInspection;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Interaction")
 	bool bIsInInteraction;
 	
@@ -69,7 +79,14 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Interaction")
 	bool bCanInteract;
 
-	//UPROPERTY(BlueprintReadOnly, Category = "Interaction")
-	//EInteractionType InteractionType;
+	
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Interaction")
+	void Inspect(AActor* ActorToInspect);
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Interaction")
+	void RotateInspectableItem(const FInputActionValue& Value);
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Interaction")
+	void ScaleInspectableItem(const FInputActionValue& Value);
 
 };
