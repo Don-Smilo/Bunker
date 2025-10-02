@@ -15,8 +15,12 @@ AMainCharacter::AMainCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	bFlashlightIsOn = false;
+
 	bIsInInteraction = false;
 	bCanInteract = false;
+
+	bIsInInspection = false;
+	bIsInFocus = false;
 
 	ActorToInteract = nullptr;
 }

@@ -68,11 +68,14 @@ protected:
 	void CheckInteract();
 
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Interaction")
+	bool bIsInInteraction;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interaction")
 	bool bIsInInspection;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Interaction")
-	bool bIsInInteraction;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interaction")
+	bool bIsInFocus;
 	
 	AActor* ActorToInteract;
 	
@@ -89,4 +92,7 @@ protected:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Interaction")
 	void ScaleInspectableItem(const FInputActionValue& Value);
 
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Interaction")
+	void Focus(AActor* ActorToFocus);
 };
