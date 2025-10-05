@@ -7,6 +7,7 @@
 #include "InputActionValue.h"
 #include "EnhancedInputSubsystems.h"
 #include "InteractableInterface.h"
+#include "InventoryComponent.h"
 
 // Sets default values
 AMainCharacter::AMainCharacter()
@@ -23,6 +24,8 @@ AMainCharacter::AMainCharacter()
 	bIsInFocus = false;
 
 	ActorToInteract = nullptr;
+
+	Inventory = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
 }
 
 // Called when the game starts or when spawned

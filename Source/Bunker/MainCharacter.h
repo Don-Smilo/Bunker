@@ -8,6 +8,7 @@
 #include "MainCharacter.generated.h"
 
 class UInputComponent;
+class UInventoryComponent;
 
 UCLASS()
 class BUNKER_API AMainCharacter : public ACharacter
@@ -16,6 +17,7 @@ class BUNKER_API AMainCharacter : public ACharacter
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputMappingContext* CurrentMappingContext;
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* MoveAction;
@@ -34,6 +36,7 @@ class BUNKER_API AMainCharacter : public ACharacter
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta =(AllowPrivateAccess="true"))
 	class UInputAction* InspectScaleAction;
+
 
 public:
 	// Sets default values for this character's properties
@@ -95,4 +98,9 @@ protected:
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Interaction")
 	void Focus(AActor* ActorToFocus);
+
+
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Inventory")
+	UInventoryComponent* Inventory;
 };
