@@ -24,6 +24,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UTexture2D* Icon;
 
-	//UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	//TSubclassOf<AActor> WorldClassActor;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TSubclassOf<AActor> WorldClassActor;
 };

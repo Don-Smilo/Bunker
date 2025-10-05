@@ -37,6 +37,8 @@ class BUNKER_API AMainCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta =(AllowPrivateAccess="true"))
 	class UInputAction* InspectScaleAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta =(AllowPrivateAccess="true"))
+	class UInputAction* InspectCollectAction;
 
 public:
 	// Sets default values for this character's properties
@@ -95,6 +97,8 @@ protected:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Interaction")
 	void ScaleInspectableItem(const FInputActionValue& Value);
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Interaction")
+	void Collect(AActor* ActorToCollect);
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Interaction")
 	void Focus(AActor* ActorToFocus);

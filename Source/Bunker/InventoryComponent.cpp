@@ -32,3 +32,50 @@ void UInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 	// ...
 }
 
+bool UInventoryComponent::AddItem(UItemDataAsset* NewItem)
+{
+	if (!NewItem)
+	{
+		return false;
+	}
+
+	for (UItemDataAsset* Item : Items)
+	{
+		if (Item && Item->ItemID == NewItem->ItemID)
+		{
+			return false;
+		}
+	}
+
+	Items.Add(NewItem);
+	return true;
+}
+
+bool UInventoryComponent::RemoveItem(UItemDataAsset* ItemToRemove)
+{
+	if (!ItemToRemove)
+	{
+		return false;
+	}
+
+	int32 Removed = Items.Remove(ItemToRemove);
+	return Removed > 0;
+}
+
+bool UInventoryComponent::HasItem(UItemDataAsset* ItemToFind)
+{
+	if (!ItemToFind)
+	{
+		return false;
+	}
+
+	for (UItemDataAsset* Item : Items)
+	{
+		if (Item && Item->ItemID == ItemToFind->ItemID)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+

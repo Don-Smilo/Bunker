@@ -26,13 +26,14 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
-	bool AddItem(UItemDataAsset* Item);
+	bool AddItem(UItemDataAsset* NewItem);
 		
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
 	bool RemoveItem(UItemDataAsset* Item);
 	
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
 	bool HasItem(UItemDataAsset* Item);
+
 
 	UPROPERTY(BlueprintReadOnly, Category = "Inventory")
 	TArray<UItemDataAsset*> Items;

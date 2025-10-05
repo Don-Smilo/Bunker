@@ -64,6 +64,7 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &AMainCharacter::Interact);
 		EnhancedInputComponent->BindAction(InspectRotationAction, ETriggerEvent::Triggered, this, &AMainCharacter::RotateInspectableItem);
 		EnhancedInputComponent->BindAction(InspectScaleAction, ETriggerEvent::Triggered, this, &AMainCharacter::ScaleInspectableItem);
+		EnhancedInputComponent->BindAction(InspectCollectAction, ETriggerEvent::Triggered, this, &AMainCharacter::Collect);
 	}
 }
 
