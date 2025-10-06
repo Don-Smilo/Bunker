@@ -9,6 +9,7 @@
 
 class UInputComponent;
 class UInventoryComponent;
+class UItemDataAsset;
 
 UCLASS()
 class BUNKER_API AMainCharacter : public ACharacter
@@ -88,19 +89,19 @@ protected:
 	bool bCanInteract;
 
 	
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Interaction")
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Inspection")
 	void Inspect(AActor* ActorToInspect);
 
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Interaction")
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Inspection")
 	void RotateInspectableItem(const FInputActionValue& Value);
 
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Interaction")
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Inspection")
 	void ScaleInspectableItem(const FInputActionValue& Value);
 
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Interaction")
-	void Collect(AActor* ActorToCollect);
+	//UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Inspection")
+	void Collect();
 
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Interaction")
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Focus")
 	void Focus(AActor* ActorToFocus);
 
 

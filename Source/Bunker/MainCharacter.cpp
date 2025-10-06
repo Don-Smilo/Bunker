@@ -7,7 +7,9 @@
 #include "InputActionValue.h"
 #include "EnhancedInputSubsystems.h"
 #include "InteractableInterface.h"
+#include "CollectableInterface.h"
 #include "InventoryComponent.h"
+#include "ItemDataAsset.h"
 
 // Sets default values
 AMainCharacter::AMainCharacter()
@@ -173,4 +175,18 @@ void AMainCharacter::CheckInteract()
 
 }
 
+void AMainCharacter::Collect()
+{
+	if (ActorToInteract)
+	{
+		if (ActorToInteract->Implements<UCollectableInterface>())
+		{
+			if (Inventory->AddItem(ICollectableInterface::Execute_GetItemData(ActorToInteract)))
+			{
+				ICollectableInterface::Execute_OnCollect(ActorToInteract, this);
+				bIsInInteraction = false;
+			}
 
+		}
+	}
+}
