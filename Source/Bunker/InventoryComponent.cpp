@@ -48,6 +48,11 @@ bool UInventoryComponent::AddItem(UItemDataAsset* NewItem)
 	}
 
 	Items.Add(NewItem);
+
+	OnItemAdded.Broadcast(NewItem);
+
+	OnInventoryUpdated.Broadcast();
+
 	return true;
 }
 
@@ -59,6 +64,9 @@ bool UInventoryComponent::RemoveItem(UItemDataAsset* ItemToRemove)
 	}
 
 	int32 Removed = Items.Remove(ItemToRemove);
+
+	OnInventoryUpdated.Broadcast();
+
 	return Removed > 0;
 }
 
@@ -77,5 +85,16 @@ bool UInventoryComponent::HasItem(UItemDataAsset* ItemToFind)
 		}
 	}
 	return false;
+}
+
+
+TArray<UItemDataAsset*> UInventoryComponent::GetItems()
+{
+	return Items;
+}
+
+int UInventoryComponent::GetInventorySize()
+{
+	return InventorySize;
 }
 

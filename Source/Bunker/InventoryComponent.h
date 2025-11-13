@@ -7,6 +7,10 @@
 #include "ItemDataAsset.h"
 #include "InventoryComponent.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnInventoryUpdated);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnItemAdded, UItemDataAsset*, AddedItem);
+
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BUNKER_API UInventoryComponent : public UActorComponent
@@ -34,8 +38,25 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
 	bool HasItem(UItemDataAsset* Item);
 
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Inventory")
+	TArray<UItemDataAsset*> GetItems();
 
-	UPROPERTY(BlueprintReadOnly, Category = "Inventory")
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Inventory")
+	int GetInventorySize();
+
+
+private:
+
 	TArray<UItemDataAsset*> Items;
+
+	int InventorySize;
+
+
+public:
+	UPROPERTY(BlueprintAssignable, Category = "Inventory")
+	FOnInventoryUpdated OnInventoryUpdated;
+
+	UPROPERTY(BlueprintAssignable, Category = "Inventory")
+	FOnItemAdded OnItemAdded;
 
 };
