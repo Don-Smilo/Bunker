@@ -7,9 +7,9 @@
 #include "ItemDataAsset.h"
 #include "InventoryComponent.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnInventoryUpdated);
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnItemAdded, UItemDataAsset*, AddedItem);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnItemAdded, UItemDataAsset*, AddedItem, int, Index);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnItemRemoved, int, Index);
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -29,7 +29,7 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	UFUNCTION(BlueprintCallable, Category = "Inventory")
+	//UFUNCTION(BlueprintCallable, Category = "Inventory")
 	bool AddItem(UItemDataAsset* NewItem);
 		
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
@@ -37,6 +37,8 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
 	bool HasItem(UItemDataAsset* Item);
+
+	int GetItemIndex(UItemDataAsset* Item);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Inventory")
 	TArray<UItemDataAsset*> GetItems();
@@ -54,9 +56,10 @@ private:
 
 public:
 	UPROPERTY(BlueprintAssignable, Category = "Inventory")
-	FOnInventoryUpdated OnInventoryUpdated;
+	FOnItemAdded OnItemAdded;
 
 	UPROPERTY(BlueprintAssignable, Category = "Inventory")
-	FOnItemAdded OnItemAdded;
+	FOnItemRemoved OnItemRemoved;
+
 
 };

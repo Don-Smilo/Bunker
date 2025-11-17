@@ -39,19 +39,23 @@ bool UInventoryComponent::AddItem(UItemDataAsset* NewItem)
 		return false;
 	}
 
-	for (UItemDataAsset* Item : Items)
+	if (HasItem(NewItem))
 	{
-		if (Item && Item->ItemID == NewItem->ItemID)
-		{
-			return false;
-		}
+		return false;
 	}
 
-	Items.Add(NewItem);
+	//for (UItemDataAsset* Item : Items)
+	//{
+	//	if (Item && Item->ItemID == NewItem->ItemID)
+	//	{
+	//		return false;
+	//	}
+	//}
 
-	OnItemAdded.Broadcast(NewItem);
+	int NewItemIndex = Items.Add(NewItem);
+		
 
-	OnInventoryUpdated.Broadcast();
+	OnItemAdded.Broadcast(NewItem, NewItemIndex);
 
 	return true;
 }
@@ -63,11 +67,20 @@ bool UInventoryComponent::RemoveItem(UItemDataAsset* ItemToRemove)
 		return false;
 	}
 
-	int32 Removed = Items.Remove(ItemToRemove);
+	int ItemIndex = GetItemIndex(ItemToRemove);
 
-	OnInventoryUpdated.Broadcast();
+	if (ItemIndex == INDEX_NONE)
+	{
+		return false;
+	}
 
-	return Removed > 0;
+	Items.RemoveAt(ItemIndex);
+
+	OnItemRemoved.Broadcast(ItemIndex);
+
+	//int32 Removed = Items.Remove(ItemToRemove);
+
+	return true;
 }
 
 bool UInventoryComponent::HasItem(UItemDataAsset* ItemToFind)
@@ -85,6 +98,11 @@ bool UInventoryComponent::HasItem(UItemDataAsset* ItemToFind)
 		}
 	}
 	return false;
+}
+
+int UInventoryComponent::GetItemIndex(UItemDataAsset* Item)
+{
+	return Items.Find(Item);
 }
 
 
