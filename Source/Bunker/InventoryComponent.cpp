@@ -10,7 +10,7 @@ UInventoryComponent::UInventoryComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
 
-	// ...
+	InventorySize = 12;
 }
 
 
@@ -44,13 +44,10 @@ bool UInventoryComponent::AddItem(UItemDataAsset* NewItem)
 		return false;
 	}
 
-	//for (UItemDataAsset* Item : Items)
-	//{
-	//	if (Item && Item->ItemID == NewItem->ItemID)
-	//	{
-	//		return false;
-	//	}
-	//}
+	if (Items.Num() >= InventorySize)
+	{
+		return false;
+	}
 
 	int NewItemIndex = Items.Add(NewItem);
 		
@@ -77,8 +74,6 @@ bool UInventoryComponent::RemoveItem(UItemDataAsset* ItemToRemove)
 	Items.RemoveAt(ItemIndex);
 
 	OnItemRemoved.Broadcast(ItemIndex);
-
-	//int32 Removed = Items.Remove(ItemToRemove);
 
 	return true;
 }
