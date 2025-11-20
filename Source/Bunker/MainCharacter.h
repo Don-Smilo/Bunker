@@ -41,6 +41,9 @@ class BUNKER_API AMainCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta =(AllowPrivateAccess="true"))
 	class UInputAction* InspectCollectAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* ShowInventoryAction;
+
 public:
 	// Sets default values for this character's properties
 	AMainCharacter();
@@ -103,6 +106,13 @@ protected:
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Focus")
 	void Focus(AActor* ActorToFocus);
+
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "UI")
+	void ShowInventory();
+	
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "UI")
+	void HideInventory();
 
 
 protected:
