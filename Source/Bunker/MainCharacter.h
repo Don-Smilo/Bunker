@@ -91,6 +91,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Interaction")
 	bool bCanInteract;
 
+	EInteractionType InteractionType;
+
+
 	
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Inspection")
 	void Inspect(AActor* ActorToInspect);
@@ -114,6 +117,9 @@ protected:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "UI")
 	void HideInventory();
 
+public:
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	EInteractionType GetInteractionType();
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Inventory")

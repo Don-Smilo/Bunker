@@ -11,7 +11,9 @@ enum class EInteractionType :uint8
 {
 	Focus,
 	Inspect,
-	Toggle
+	Toggle,
+	Blocked,
+	None
 };
 
 // This class does not need to be modified.
@@ -48,5 +50,12 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
 	FText GetInteractionText() const;
+
+	
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
+	UItemDataAsset* GetRequestedItem() const;
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
+	void Unlock();
 
 };

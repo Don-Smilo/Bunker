@@ -21,6 +21,8 @@ AMainCharacter::AMainCharacter()
 
 	bIsInInteraction = false;
 	bCanInteract = false;
+	InteractionType = EInteractionType::None;
+
 
 	bIsInInspection = false;
 	bIsInFocus = false;
@@ -99,30 +101,54 @@ void AMainCharacter::Interact()
 {
 	if (ActorToInteract != nullptr)
 	{
-		if (IInteractableInterface::Execute_GetInteractionType(ActorToInteract) == EInteractionType::Toggle)
+		if (InteractionType == EInteractionType::Blocked)
 		{
-			IInteractableInterface::Execute_StartInteract(ActorToInteract, this);
+			//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Blocked"));
 
-			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Toggled"));
-		}
+			UItemDataAsset* RequiredItem = IInteractableInterface::Execute_GetRequestedItem(ActorToInteract);
 
-		else
-		{
-			if (!bIsInInteraction)
+			if (Inventory->HasItem(RequiredItem))
 			{
-				IInteractableInterface::Execute_StartInteract(ActorToInteract, this);
-				bCanInteract = false;
-				bIsInInteraction = true;
-
-				//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Interaction started"));
+				IInteractableInterface::Execute_Unlock(ActorToInteract);
+				Inventory->RemoveItem(RequiredItem);
 			}
 
 			else
 			{
-				IInteractableInterface::Execute_StopInteract(ActorToInteract, this);
-				bIsInInteraction = false;
+				GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("No requred item"));
 				
-				//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Interaction stopped"));
+			}
+
+		}
+
+		else
+		{
+
+			if (InteractionType == EInteractionType::Toggle)
+			{
+				IInteractableInterface::Execute_StartInteract(ActorToInteract, this);
+
+				//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Toggled"));
+			}
+
+			else
+			{
+				if (!bIsInInteraction)
+				{
+					IInteractableInterface::Execute_StartInteract(ActorToInteract, this);
+					bCanInteract = false;
+					bIsInInteraction = true;
+
+					//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Interaction started"));
+				}
+
+				else
+				{
+					IInteractableInterface::Execute_StopInteract(ActorToInteract, this);
+					bIsInInteraction = false;
+
+					//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Interaction stopped"));
+				}
 			}
 		}
 
@@ -155,12 +181,15 @@ void AMainCharacter::CheckInteract()
 			{
 				ActorToInteract = HitActor;
 				bCanInteract = IInteractableInterface::Execute_GetCanInteract(ActorToInteract);
+				InteractionType = IInteractableInterface::Execute_GetInteractionType(ActorToInteract);
 			}
 
 			else
 			{
 				ActorToInteract = nullptr;
 				bCanInteract = false;
+				InteractionType = EInteractionType::None;
+				
 			}
 		}
 
@@ -168,12 +197,14 @@ void AMainCharacter::CheckInteract()
 		{
 			ActorToInteract = nullptr;
 			bCanInteract = false;
+			InteractionType = EInteractionType::None;
 		}
 	}
 
 	else
 	{
 		bCanInteract = false;
+		InteractionType = EInteractionType::None;
 	}
 
 }
@@ -192,4 +223,9 @@ void AMainCharacter::Collect()
 
 		}
 	}
+}
+
+EInteractionType AMainCharacter::GetInteractionType()
+{
+	return InteractionType;
 }
