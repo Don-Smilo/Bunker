@@ -165,7 +165,7 @@ void AMainCharacter::CheckInteract()
 		GetController()->GetPlayerViewPoint(ViewLocation, ViewRotation);
 
 		FVector TraceStart = ViewLocation;
-		FVector TraceEnd = TraceStart + (ViewRotation.Vector() * 100.f);
+		FVector TraceEnd = TraceStart + (ViewRotation.Vector() * 150.f);
 
 		FHitResult HitResult;
 		FCollisionQueryParams Params;
