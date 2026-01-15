@@ -42,7 +42,18 @@ class BUNKER_API AMainCharacter : public ACharacter
 	class UInputAction* InspectCollectAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* InspectEscapeAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* ShowInventoryAction;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* FocusEscapeAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* PauseMenuAction;
+
+
 
 public:
 	// Sets default values for this character's properties
@@ -116,6 +127,9 @@ protected:
 	
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "UI")
 	void HideInventory();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Pause")
+	void PauseGame();
 
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)

@@ -69,9 +69,15 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 		EnhancedInputComponent->BindAction(InspectRotationAction, ETriggerEvent::Triggered, this, &AMainCharacter::RotateInspectableItem);
 		EnhancedInputComponent->BindAction(InspectScaleAction, ETriggerEvent::Triggered, this, &AMainCharacter::ScaleInspectableItem);
 		EnhancedInputComponent->BindAction(InspectCollectAction, ETriggerEvent::Triggered, this, &AMainCharacter::Collect);
+		EnhancedInputComponent->BindAction(InspectEscapeAction, ETriggerEvent::Triggered, this, &AMainCharacter::Interact);
+		EnhancedInputComponent->BindAction(FocusEscapeAction, ETriggerEvent::Triggered, this, &AMainCharacter::Interact);
+		
 		
 		EnhancedInputComponent->BindAction(ShowInventoryAction, ETriggerEvent::Started, this, &AMainCharacter::ShowInventory);
 		EnhancedInputComponent->BindAction(ShowInventoryAction, ETriggerEvent::Completed, this, &AMainCharacter::HideInventory);
+
+		EnhancedInputComponent->BindAction(PauseMenuAction, ETriggerEvent::Triggered, this, &AMainCharacter::PauseGame);
+
 	}
 }
 
