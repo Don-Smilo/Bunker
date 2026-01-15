@@ -14,6 +14,7 @@ The player must escape from the bunker by interacting with the environment. The 
 - Tab - show/hide inventory
 - LMB - collect (in inspection)
 - Scroll Up/Down - "scale" (in inspection)
+- Esc - pause menu or exit interaction
 
 
 ## What is already done
@@ -22,6 +23,7 @@ The player must escape from the bunker by interacting with the environment. The 
 - Collectable objects and simple inventory (items could be added and removed from it)
 - Some object-object interaction logic, demonstrated by lights and switcher 
 - Testing area with examples
+- Simple pause menu
 
 
 ## What is in plans
