@@ -13,6 +13,7 @@ The player must escape from the bunker by interacting with the environment. The 
 - E - interact
 - Tab - show/hide inventory
 - LMB - collect (in inspection)
+- Scroll Up/Down - "scale" (in inspection)
 
 
 ## What is already done
