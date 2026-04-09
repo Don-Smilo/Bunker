@@ -24,6 +24,7 @@ The player must escape from the bunker by interacting with the environment. The 
 - Some object-object interaction logic, demonstrated by lights and switcher 
 - Testing area with examples
 - Simple pause menu
+- Computer comand system
 
 
 ## What is in plans
