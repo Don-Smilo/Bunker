@@ -9,7 +9,7 @@
 
 class AComandManager;
 
-UCLASS()
+UCLASS(Abstract)
 class BUNKER_API ACommandRecieverBASE : public AActor, public ITerminalDeviceInterface
 {
 	GENERATED_BODY()
