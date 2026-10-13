@@ -104,6 +104,10 @@ protected:
 
 	EInteractionType InteractionType;
 
+	float InteractionTraceDistance = 200.f;
+	float InteractionTraceRadius = 5.f;
+	TArray<AActor*> IntractionIgnoredActors;
+	ETraceTypeQuery InteractionTraceType;
 
 	
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Inspection")

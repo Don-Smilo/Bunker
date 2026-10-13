@@ -2,10 +2,13 @@
 
 
 #include "MainCharacter.h"
+
 #include "EnhancedInputComponent.h"
 #include "Camera/CameraComponent.h"
 #include "InputActionValue.h"
 #include "EnhancedInputSubsystems.h"
+#include "Kismet/KismetSystemLibrary.h"
+
 #include "InteractableInterface.h"
 #include "CollectableInterface.h"
 #include "InventoryComponent.h"
@@ -30,6 +33,9 @@ AMainCharacter::AMainCharacter()
 	ActorToInteract = nullptr;
 
 	Inventory = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
+
+	IntractionIgnoredActors.Add(this);
+	InteractionTraceType = UEngineTypes::ConvertToTraceType(ECC_Visibility);
 }
 
 // Called when the game starts or when spawned
@@ -107,10 +113,10 @@ void AMainCharacter::Interact()
 {
 	if (ActorToInteract != nullptr)
 	{
-		if (InteractionType == EInteractionType::Blocked)
+		switch (InteractionType)
 		{
-			//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Blocked"));
-
+		case EInteractionType::Blocked:
+		{
 			UItemDataAsset* RequiredItem = IInteractableInterface::Execute_GetRequestedItem(ActorToInteract);
 
 			if (Inventory->HasItem(RequiredItem))
@@ -122,42 +128,46 @@ void AMainCharacter::Interact()
 			else
 			{
 				GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("No requred item"));
-				
 			}
-
 		}
+			break;
 
-		else
-		{
 
-			if (InteractionType == EInteractionType::Toggle)
+		case EInteractionType::Toggle:
+
+			IInteractableInterface::Execute_StartInteract(ActorToInteract, this);
+			
+			break;
+
+
+		case EInteractionType::Focus:
+		case EInteractionType::Inspect:
+			
+			if (!bIsInInteraction)
 			{
 				IInteractableInterface::Execute_StartInteract(ActorToInteract, this);
 
-				//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Toggled"));
+				bCanInteract = false;
+				bIsInInteraction = true;
 			}
 
 			else
 			{
-				if (!bIsInInteraction)
-				{
-					IInteractableInterface::Execute_StartInteract(ActorToInteract, this);
-					bCanInteract = false;
-					bIsInInteraction = true;
-
-					//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Interaction started"));
-				}
-
-				else
-				{
-					IInteractableInterface::Execute_StopInteract(ActorToInteract, this);
-					bIsInInteraction = false;
-
-					//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Interaction stopped"));
-				}
+				IInteractableInterface::Execute_StopInteract(ActorToInteract, this);
+				bIsInInteraction = false;
 			}
-		}
 
+			break;
+
+
+		case EInteractionType::None:
+			break;
+
+
+		default:
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("UNEXPECTED INTERACTION TYPE"));
+			break;
+		}
 	}
 }
 
@@ -171,13 +181,16 @@ void AMainCharacter::CheckInteract()
 		GetController()->GetPlayerViewPoint(ViewLocation, ViewRotation);
 
 		FVector TraceStart = ViewLocation;
-		FVector TraceEnd = TraceStart + (ViewRotation.Vector() * 150.f);
+		FVector TraceEnd = TraceStart + (ViewRotation.Vector() * InteractionTraceDistance);
 
 		FHitResult HitResult;
-		FCollisionQueryParams Params;
-		Params.AddIgnoredActor(this);
 
-		bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECC_Visibility, Params);
+		bool bHit = UKismetSystemLibrary::SphereTraceSingle(
+			GetWorld(),
+			TraceStart, TraceEnd, InteractionTraceRadius,
+			InteractionTraceType, false, IntractionIgnoredActors, 
+			EDrawDebugTrace::None, HitResult, true
+		);
 
 		if (bHit && HitResult.GetActor())
 		{
