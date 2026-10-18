@@ -111,64 +111,62 @@ void AMainCharacter::Look(const FInputActionValue& Value)
 
 void AMainCharacter::Interact()
 {
-	if (ActorToInteract != nullptr)
+	if (ActorToInteract == nullptr)
+		return;
+
+	switch (InteractionType)
 	{
-		switch (InteractionType)
-		{
-		case EInteractionType::Blocked:
-		{
-			UItemDataAsset* RequiredItem = IInteractableInterface::Execute_GetRequestedItem(ActorToInteract);
+	case EInteractionType::Blocked:
+	{
+		UItemDataAsset* RequiredItem = IInteractableInterface::Execute_GetRequestedItem(ActorToInteract);
 
-			if (Inventory->HasItem(RequiredItem))
-			{
-				IInteractableInterface::Execute_Unlock(ActorToInteract);
-				Inventory->RemoveItem(RequiredItem);
-			}
-
-			else
-			{
-				GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("No requred item"));
-			}
+		if (Inventory->HasItem(RequiredItem))
+		{
+			IInteractableInterface::Execute_Unlock(ActorToInteract);
+			Inventory->RemoveItem(RequiredItem);
 		}
-			break;
 
-
-		case EInteractionType::Toggle:
-
-			IInteractableInterface::Execute_StartInteract(ActorToInteract, this);
-			
-			break;
-
-
-		case EInteractionType::Focus:
-		case EInteractionType::Inspect:
-			
-			if (!bIsInInteraction)
-			{
-				IInteractableInterface::Execute_StartInteract(ActorToInteract, this);
-
-				bCanInteract = false;
-				bIsInInteraction = true;
-			}
-
-			else
-			{
-				IInteractableInterface::Execute_StopInteract(ActorToInteract, this);
-				bIsInInteraction = false;
-			}
-
-			break;
-
-
-		case EInteractionType::None:
-			break;
-
-
-		default:
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("UNEXPECTED INTERACTION TYPE"));
-			break;
+		else
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("No requred item"));
 		}
 	}
+		break;
+
+
+	case EInteractionType::Toggle:
+
+		IInteractableInterface::Execute_StartInteract(ActorToInteract, this);
+
+		break;
+
+
+	case EInteractionType::Focus:
+	case EInteractionType::Inspect:
+
+		if (!bIsInInteraction)
+		{
+			IInteractableInterface::Execute_StartInteract(ActorToInteract, this);
+
+			bCanInteract = false;
+			bIsInInteraction = true;
+		}
+
+		break;
+
+
+	case EInteractionType::None:
+		if(bIsInInteraction)
+			IInteractableInterface::Execute_StopInteract(ActorToInteract, this);
+
+		break;
+
+
+	default:
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("UNEXPECTED INTERACTION TYPE"));
+		break;
+	}
+
 }
 
 void AMainCharacter::CheckInteract()
